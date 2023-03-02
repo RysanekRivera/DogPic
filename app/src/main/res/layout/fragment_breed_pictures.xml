@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.rysanek.customviews.ColorConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.BreedPicturesFragment">
+
+    <com.rysanek.customviews.ColorConstraintLayout
+        android:id="@+id/breedPictureNavBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:colorConstraintLayoutBackgroundColor="button_bg_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/breedBackArrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <com.rysanek.customviews.ColorImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:src="@drawable/ic_arrow_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.rysanek.customviews.ColorConstraintLayout
+            android:id="@+id/breedTitleContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/circularProgressIndicator"
+            app:layout_constraintStart_toEndOf="@+id/breedBackArrow"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.538"
+            tools:visibility="visible">
+
+            <com.rysanek.customviews.ColorTextView
+                android:id="@+id/breedTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Title Text" />
+
+        </com.rysanek.customviews.ColorConstraintLayout>
+
+    </com.rysanek.customviews.ColorConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvBreedPictures"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/breedPictureNavBar"
+        app:spanCount="1"
+        tools:listitem="@layout/single_dog_pic" />
+
+    <com.rysanek.customviews.ColorTextView
+        android:id="@+id/tvNoPics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_picture_available"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:colorTextViewColor="button_bg_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+
+</com.rysanek.customviews.ColorConstraintLayout>

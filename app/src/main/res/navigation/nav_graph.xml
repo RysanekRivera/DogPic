@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dogRunFragment">
+
+    <fragment
+        android:id="@+id/dogRunFragment"
+        android:name="com.rysanek.dogpic.ui.fragments.DogRunFragment"
+        android:label="fragment_splash_screen"
+        tools:layout="@layout/fragment_dog_run" >
+        <action
+            android:id="@+id/action_dogRunFragment_to_allDogBreedsFragment"
+            app:destination="@id/allDogBreedsFragment"
+            app:popUpTo="@id/dogRunFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/allDogBreedsFragment"
+        android:name="com.rysanek.dogpic.ui.fragments.AllDogBreedsFragment"
+        android:label="fragment_all_dog_breeds"
+        tools:layout="@layout/fragment_all_dog_breeds" >
+        <action
+            android:id="@+id/action_allDogBreedsFragment_to_breedPicturesFragment"
+            app:destination="@id/breedPicturesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/breedPicturesFragment"
+        android:name="com.rysanek.dogpic.ui.fragments.BreedPicturesFragment"
+        android:label="fragment_breed_pictures"
+        tools:layout="@layout/fragment_breed_pictures" />
+
+</navigation>

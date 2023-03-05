@@ -1,7 +1,7 @@
-package com.rysanek.dogpic.data.apis
+package com.rysanek.dogpic.data.remote.apis
 
-import com.rysanek.dogpic.data.models.AllDogsApiResponse
-import com.rysanek.dogpic.data.models.BreedImagesResponse
+import com.rysanek.dogpic.data.remote.models.AllDogsApiResponse
+import com.rysanek.dogpic.data.remote.models.BreedImagesResponse
 import com.rysanek.dogpic.data.utils.DataConstants.ALL_BREEDS
 import com.rysanek.dogpic.data.utils.DataConstants.BREED_IMAGES
 import com.rysanek.dogpic.data.utils.DataConstants.BREED_TYPE

@@ -1,7 +1,7 @@
-package com.rysanek.dogpic.data.models
+package com.rysanek.dogpic.data.remote.models
 
 data class Dog(
     val breed: String,
-    var subBreeds: List<String>? = null,
+    var subBreeds: List<Dog>? = null,
     var pictureUrls: List<String>? = null
 )

@@ -1,5 +1,6 @@
 package com.rysanek.dogpic.domain.usecases
 
+import com.rysanek.dogpic.domain.mappers.processAndMap
 import com.rysanek.dogpic.domain.repositories.DogPicRepositoryImpl
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -10,12 +11,6 @@ class GetBreedImages @Inject constructor(
 ) {
 
     suspend fun fetchBreedImages(breedType: String) = flow { emit(repository.getBreedImages(breedType)) }
-        .map { response ->
-            if (response.isSuccessful && response.body() != null){
-                response.body()!!.message
-            } else {
-                emptyList()
-            }
-        }
+        .map { response -> response.processAndMap() }
 
 }

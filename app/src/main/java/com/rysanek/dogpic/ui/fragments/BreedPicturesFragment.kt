@@ -12,9 +12,10 @@ import com.rysanek.dogpic.databinding.FragmentBreedPicturesBinding
 import com.rysanek.dogpic.ui.adapters.BreedPicturesRecycleViewAdapter
 import com.rysanek.dogpic.ui.fragments.basefragment.DogPicFragment
 import com.rysanek.dogpic.ui.viewmodels.DogPicViewModel
-import java.util.Locale
 
 class BreedPicturesFragment : DogPicFragment() {
+
+    companion object { private val TAG = this::class.simpleName }
 
     private var _layout: FragmentBreedPicturesBinding? = null
     private val layout get() = _layout!!
@@ -56,24 +57,21 @@ class BreedPicturesFragment : DogPicFragment() {
             viewModel.responseToNetworkEvents(
                 onLoading = { showLoadingSpinner() },
                 onSuccess = {
-
                     if (viewModel.currentDog.pictureUrls.isNullOrEmpty())
                         layout.tvNoPics.visibility = View.VISIBLE
-                    else {
+                    else
                         adapter.setDogsList(viewModel.currentDog.pictureUrls!!)
-                    }
 
                     hideLoadingSpinner()
                 },
                 onError = { message ->
 
-                    Log.e("BreedPicturesFrag", "Error Downloading: $message")
+                    Log.e(TAG, "Error Downloading: $message")
 
                     if (viewModel.currentDog.pictureUrls.isNullOrEmpty())
                         layout.tvNoPics.visibility = View.VISIBLE
-                    else {
+                    else
                         adapter.setDogsList(viewModel.currentDog.pictureUrls!!)
-                    }
 
                     hideLoadingSpinner()
 
@@ -96,7 +94,7 @@ class BreedPicturesFragment : DogPicFragment() {
     private fun navBarSetup() {
         layout.breedTitleContainer.visibility = View.VISIBLE
         layout.breedTitle.visibility = View.VISIBLE
-        layout.breedTitle.text = viewModel.currentDog.breed.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+        layout.breedTitle.text = viewModel.currentDog.breed
         layout.breedBackArrow.setOnClickListener { findNavController().popBackStack() }
     }
 }

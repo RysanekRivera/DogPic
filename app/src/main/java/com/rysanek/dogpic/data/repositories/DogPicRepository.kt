@@ -1,7 +1,7 @@
 package com.rysanek.dogpic.data.repositories
 
-import com.rysanek.dogpic.data.models.AllDogsApiResponse
-import com.rysanek.dogpic.data.models.BreedImagesResponse
+import com.rysanek.dogpic.data.remote.models.AllDogsApiResponse
+import com.rysanek.dogpic.data.remote.models.BreedImagesResponse
 import retrofit2.Response
 
 interface DogPicRepository {

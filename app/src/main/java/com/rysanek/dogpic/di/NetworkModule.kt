@@ -1,7 +1,7 @@
 package com.rysanek.dogpic.di
 
 import com.google.gson.Gson
-import com.rysanek.dogpic.data.apis.DogPicApi
+import com.rysanek.dogpic.data.remote.apis.DogPicApi
 import com.rysanek.dogpic.data.utils.DataConstants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -11,13 +11,20 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private val client = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC)).build()
+    private val client = OkHttpClient.Builder()
+        .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BASIC))
+        .connectTimeout(5, TimeUnit.SECONDS)
+        .writeTimeout(5, TimeUnit.SECONDS)
+        .readTimeout(5, TimeUnit.SECONDS)
+        .retryOnConnectionFailure(true)
+        .build()
 
     @Singleton
     @Provides

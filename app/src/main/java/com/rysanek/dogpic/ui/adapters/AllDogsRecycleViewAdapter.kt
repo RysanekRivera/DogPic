@@ -3,7 +3,7 @@ package com.rysanek.dogpic.ui.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.rysanek.dogpic.data.models.Dog
+import com.rysanek.dogpic.data.remote.models.Dog
 import com.rysanek.dogpic.databinding.SingleDogBreedBinding
 import java.util.Locale
 

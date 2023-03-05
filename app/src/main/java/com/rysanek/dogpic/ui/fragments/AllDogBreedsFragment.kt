@@ -1,6 +1,7 @@
 package com.rysanek.dogpic.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import com.rysanek.customviews.theme.ThemeManager.currentTheme
 import com.rysanek.customviews.utils.ColorExtUtils.toColor
 import com.rysanek.dogpic.R
 import com.rysanek.dogpic.databinding.FragmentAllDogBreedsBinding
+import com.rysanek.dogpic.domain.mappers.filterBreedsBy
 import com.rysanek.dogpic.ui.adapters.AllDogsRecycleViewAdapter
 import com.rysanek.dogpic.ui.fragments.basefragment.DogPicFragment
 import com.rysanek.dogpic.ui.viewmodels.DogPicViewModel
@@ -25,13 +27,14 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class AllDogBreedsFragment : DogPicFragment() {
 
+    companion object { private val TAG = this::class.simpleName }
+
     private var _layout: FragmentAllDogBreedsBinding? = null
     private val layout get() = _layout!!
 
     private val viewModel: DogPicViewModel by activityViewModels()
-    private val adapter : AllDogsRecycleViewAdapter by lazy { AllDogsRecycleViewAdapter() }
+    private val adapter: AllDogsRecycleViewAdapter by lazy { AllDogsRecycleViewAdapter() }
     private var searchJob: Job? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,17 +61,7 @@ class AllDogBreedsFragment : DogPicFragment() {
 
         setupSearchBar()
 
-        lifecycleScope.launchWhenStarted {
-
-            viewModel.responseToNetworkEvents(
-                onLoading = { showLoadingSpinner() },
-                onSuccess = { hideLoadingSpinner() },
-                onError = { hideLoadingSpinner() },
-                onIdle = { hideLoadingSpinner() }
-            )
-
-            viewModel.allBreeds.collectLatest { dogsList -> adapter.setDogsList(dogsList) }
-        }
+        collectAllBreedsAndHandleNetworkEvents()
     }
 
     override fun onDestroyView() {
@@ -105,10 +98,27 @@ class AllDogBreedsFragment : DogPicFragment() {
             } else {
                 searchJob?.cancel()
                 searchJob = CoroutineScope(Main).launch {
-                    adapter.setDogsList(viewModel.allBreeds.value.filter { it.breed.startsWith(editable!!.toString()) }.sortedBy { it.breed })
+                    adapter.setDogsList(viewModel.allBreeds.value.filterBreedsBy(text = editable!!))
                 }
 
             }
+        }
+    }
+
+    private fun collectAllBreedsAndHandleNetworkEvents() {
+        lifecycleScope.launchWhenStarted {
+
+            viewModel.responseToNetworkEvents(
+                onLoading = { showLoadingSpinner() },
+                onSuccess = { hideLoadingSpinner() },
+                onError = { message ->
+                    Log.e(TAG, "Error Downloading: $message")
+                    hideLoadingSpinner()
+                },
+                onIdle = { hideLoadingSpinner() }
+            )
+
+            viewModel.allBreeds.collectLatest { dogsList -> adapter.setDogsList(dogsList) }
         }
     }
 

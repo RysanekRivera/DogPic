@@ -2,16 +2,19 @@ package com.rysanek.dogpic.ui.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rysanek.dogpic.data.models.Dog
+import com.rysanek.dogpic.data.remote.apis.responses.DogApiResponse
+import com.rysanek.dogpic.data.remote.models.Dog
 import com.rysanek.dogpic.domain.eventhandlers.NetworkEventHandler
+import com.rysanek.dogpic.domain.mappers.formulateErrorMessage
 import com.rysanek.dogpic.domain.usecases.GetAllBreeds
 import com.rysanek.dogpic.domain.usecases.GetBreedImages
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,10 +38,21 @@ class DogPicViewModel @Inject constructor(
                 .catch { e ->
                     event.onError(e.message)
                 }
-                .collect { dogsList ->
-                    _allBreeds.emit(dogsList)
-                    event.onSuccess()
+                .onCompletion {
+                    event.onIdle()
+                }
+                .collect { response ->
+                    _allBreeds.emit(
+                        when (response) {
+                            is DogApiResponse.Success -> { response.data }
+                            is DogApiResponse.Error -> {
+                                event.onError(message = formulateErrorMessage(code = response.code, message = response.message))
+                                emptyList()
+                            }
+                        }
+                    )
 
+                    event.onSuccess()
                 }
         }
     }
@@ -46,21 +60,26 @@ class DogPicViewModel @Inject constructor(
     fun getBreedPictures() {
         viewModelScope.launch {
             event.onLoading()
-            getBreedImages.fetchBreedImages(currentDog.breed)
-                .catch { e ->
-                    event.onError(e.message)
-                }
-                .collect { pictureUrls ->
-                    currentDog.pictureUrls = pictureUrls
+            getBreedImages.fetchBreedImages(currentDog.breed.lowercase(Locale.ROOT))
+                .catch { e -> event.onError(e.message) }
+                .onCompletion { event.onIdle() }
+                .collect { response ->
+                    currentDog.pictureUrls = when (response) {
+                        is DogApiResponse.Success -> { response.data }
+                        is DogApiResponse.Error -> {
+                            event.onError(message = formulateErrorMessage(response.code, response.message))
+                            emptyList()
+                        }
+                    }
+
                     event.onSuccess()
                 }
         }
     }
 
-
     fun responseToNetworkEvents(
         onSuccess: () -> Unit = {},
-        onError: (String?) -> Unit = {},
+        onError: (message: String?) -> Unit = { },
         onLoading: () -> Unit = {},
         onIdle: () -> Unit = {}
     ) {

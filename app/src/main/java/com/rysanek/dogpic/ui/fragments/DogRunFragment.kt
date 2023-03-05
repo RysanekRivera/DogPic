@@ -42,6 +42,6 @@ class DogRunFragment: DogPicFragment() {
         _layout = null
     }
 
-    private fun startRunDogAnimation() = Glide.with(layout.root.context).load(R.drawable.run_dog).into(layout.ivDogRun)
+    private fun startRunDogAnimation() = Glide.with(this).load(R.drawable.run_dog).into(layout.ivDogRun)
 
 }
